@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marin Petru — IT Support & Systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --bg-panel: #10151c;
+      --bg-panel-2: #141a22;
+      --border: #232b35;
+      --border-soft: #1a2028;
+      --text: #e6edf3;
+      --text-dim: #7d8a99;
+      --text-faint: #4b5563;
+      --amber: #ffb454;
+      --amber-dim: #8a6a3d;
+      --cyan: #5ec8d8;
+      --green: #6fcf97;
+      --red: #e5686b;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    ::selection {
+      background: var(--amber);
+      color: #0b0f14;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--amber);
+    }
+
+    /* background texture */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(94, 200, 216, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94, 200, 216, 0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 30%, transparent 80%);
+    }
+
+    .glow {
+      position: fixed;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(255, 180, 84, 0.08) 0%, transparent 65%);
+    }
+
+    .scanline {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 1px,
+          transparent 1px, transparent 3px);
+      opacity: 0.5;
+    }
+
+    section,
+    header,
+    footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 6vw;
+      background: rgba(11, 15, 20, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .nav-brand {
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-brand .accent {
+      color: var(--amber);
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    .nav-links a::before {
+      content: "./";
+      color: var(--text-faint);
+    }
+
+    .nav-links a:hover {
+      color: var(--amber);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 1.1rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      padding: 6vh 6vw;
+    }
+
+    .eyebrow {
+      color: var(--amber);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+    }
+
+    .hero-text h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .hero-text h1 .blink-cursor {
+      display: inline-block;
+      width: 0.5em;
+      background: var(--amber);
+      animation: blink 1s step-end infinite;
+      margin-left: 4px;
+    }
+
+    .tagline {
+      color: var(--text-dim);
+      font-size: 1rem;
+      max-width: 46ch;
+      margin-bottom: 26px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .hero-tags span {
+      border: 1px solid var(--border);
+      color: var(--cyan);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--green);
+      border: 1px solid rgba(111, 207, 151, 0.3);
+      background: rgba(111, 207, 151, 0.06);
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    .status-badge .dotpulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    /* TERMINAL */
+    .terminal-window {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .terminal-chrome {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 14px;
+      background: var(--bg-panel-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot.red {
+      background: #e5686b;
+    }
+
+    .dot.yellow {
+      background: #f2c94c;
+    }
+
+    .dot.green {
+      background: #6fcf97;
+    }
+
+    .terminal-title {
+      margin-left: 10px;
+      font-size: 0.75rem;
+      color: var(--text-faint);
+    }
+
+    .terminal-body {
+      padding: 18px 20px;
+      font-size: 0.82rem;
+      min-height: 220px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .terminal-body .line {
+      margin-bottom: 6px;
+      white-space: pre-wrap;
+    }
+
+    .terminal-body .ok {
+      color: var(--green);
+    }
+
+    .terminal-body .tag-info {
+      color: var(--cyan);
+    }
+
+    .terminal-body .dim {
+      color: var(--text-dim);
+    }
+
+    .terminal-body .out {
+      color: var(--text);
+      padding-left: 14px;
+    }
+
+    .terminal-body .err {
+      color: var(--red);
+    }
+
+    .terminal-body .amber {
+      color: var(--amber);
+    }
+
+    .terminal-input-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-panel-2);
+    }
+
+    .terminal-input-line .prompt {
+      color: var(--amber);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .terminal-input-line input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 9vh 6vw;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 44px;
+    }
+
+    .section h2 .tag {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--amber);
+      border: 1px solid var(--amber-dim);
+      border-radius: 6px;
+      padding: 3px 9px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ABOUT */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .about-content p {
+      color: var(--text-dim);
+      margin-bottom: 16px;
+      max-width: 60ch;
+    }
+
+    .about-content strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .focus-list {
+      list-style: none;
+      margin-top: 18px;
+    }
+
+    .focus-list li {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .focus-list li::before {
+      content: "›";
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+    }
+
+    .topology {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .topology .node-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      fill: var(--text-dim);
+    }
+
+    .topology .node-label.center {
+      fill: var(--amber);
+      font-size: 12px;
+    }
+
+    .topology circle.center {
+      fill: #1a140b;
+      stroke: var(--amber);
+      stroke-width: 2;
+    }
+
+    .topology circle.sat {
+      fill: var(--bg-panel);
+      stroke: var(--cyan);
+      stroke-width: 1.5;
+    }
+
+    .topology line {
+      stroke: var(--border);
+      stroke-width: 1.5;
+    }
+
+    .topology line.flow {
+      stroke: var(--cyan);
+      stroke-dasharray: 4 6;
+      animation: dash 3s linear infinite;
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -40;
+      }
+    }
+
+    /* EDUCATION LOG */
+    .log-entries {
+      border-left: 2px solid var(--border);
+      padding-left: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .log-entry {
+      position: relative;
+    }
+
+    .log-entry::before {
+      content: "";
+      position: absolute;
+      left: -33px;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--amber);
+    }
+
+    .log-timestamp {
+      color: var(--amber);
+      font-size: 0.78rem;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .log-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .log-org {
+      color: var(--cyan);
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    .log-modules {
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .log-modules span {
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .skill-cat {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .skill-cat:hover {
+      border-color: var(--amber-dim);
+      transform: translateY(-3px);
+    }
+
+    .skill-cat h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      margin-bottom: 16px;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-cat h3::before {
+      content: "//";
+      color: var(--text-faint);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-tags span {
+      font-size: 0.78rem;
+      color: var(--text);
+      background: var(--bg-panel-2);
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .skill-tags span:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+    }
+
+    .note-box {
+      margin-top: 36px;
+      border-left: 3px solid var(--amber);
+      background: var(--bg-panel);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    .note-box strong {
+      color: var(--amber);
+    }
+
+    /* CONTACT */
+    .contact-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 40px;
+      max-width: 640px;
+    }
+
+    .contact-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-soft);
+      font-size: 0.88rem;
+    }
+
+    .contact-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .contact-row .k {
+      color: var(--text-dim);
+    }
+
+    .contact-row .v {
+      color: var(--text);
+    }
+
+    .cta-row {
+      margin-top: 26px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 11px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: var(--amber);
+      color: #0b0f14;
+    }
+
+    .btn.secondary {
+      border-color: var(--border);
+      color: var(--text-dim);
+    }
+
+    .btn.secondary:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: transparent;
+    }
+
+    footer {
+      padding: 30px 6vw;
+      text-align: center;
+      color: var(--text-faint);
+      font-size: 0.75rem;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 4vh;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 6vw;
+        display: none;
+        gap: 16px;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+    }
+
+    @media (max-width:560px) {
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="grid-overlay"></div>
+  <div class="glow"></div>
+  <div class="scanline"></div>
+
+  <nav class="nav">
+    <div class="nav-brand">root<span class="accent">@</span>portfolio<span class="accent">:</span>~$</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">≡</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">about</a></li>
+      <li><a href="#education">education</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero" id="hero">
+    <div class="hero-text">
+      <p class="eyebrow">// IT Support &amp; Systems Administration</p>
+      <h1>Marin Petru<span class="blink-cursor">&nbsp;</span></h1>
+      <p class="tagline">Entry-level IT specialist with a focus on technical support, networking (LAN/WLAN) and
+        Microsoft 365 administration. Comfortable in enterprise environments, driven by troubleshooting and continuous
+        learning.</p>
+      <div class="hero-tags">
+        <span>Networking</span><span>Cloud Infrastructure</span><span>Troubleshooting</span><span>M365 Admin</span>
+      </div>
+      <div class="status-badge"><span class="dotpulse"></span> STATUS: open to entry-level IT roles</div>
+    </div>
+
+    <div class="terminal-window">
+      <div class="terminal-chrome">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="terminal-title">guest@portfolio: ~</span>
+      </div>
+      <div class="terminal-body" id="terminalBody"></div>
+      <div class="terminal-input-line">
+        <span class="prompt">guest@portfolio:~$</span>
+        <input id="terminalInput" type="text" autocomplete="off" spellcheck="false" aria-label="Terminal command input"
+          placeholder="type 'help' and press enter" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="about">
+    <h2><span class="tag">01</span> whoami</h2>
+    <div class="about-content">
+      <div>
+        <p>I'm a <strong>Accounting &amp; Management Information Systems student</strong> at Facultatea de Științe
+          Economice ULBS, building a practical foundation in databases, business systems and programming — while my real
+          interest sits closer to the machine room than the spreadsheet.</p>
+        <p>I'm drawn to <strong>IT support and systems administration</strong>: solid grounding in LAN/WLAN networking,
+          IT infrastructure and Microsoft 365, and a habit of digging into a problem until the root cause shows up, not
+          just the symptom.</p>
+        <ul class="focus-list">
+          <li>Structured troubleshooting over guesswork</li>
+          <li>Comfortable moving between Windows, Linux and cloud consoles</li>
+          <li>Currently deepening knowledge of enterprise networking and cloud platforms (AWS, Oracle Cloud)</li>
+        </ul>
+      </div>
+      <svg class="topology" viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg">
+        <line class="flow" x1="240" y1="130" x2="100" y2="55"></line>
+        <line class="flow" x1="240" y1="130" x2="380" y2="55"></line>
+        <line class="flow" x1="240" y1="130" x2="100" y2="205"></line>
+        <line class="flow" x1="240" y1="130" x2="380" y2="205"></line>
+        <circle class="sat" cx="100" cy="55" r="34"></circle>
+        <circle class="sat" cx="380" cy="55" r="34"></circle>
+        <circle class="sat" cx="100" cy="205" r="34"></circle>
+        <circle class="sat" cx="380" cy="205" r="34"></circle>
+        <circle class="center" cx="240" cy="130" r="46"></circle>
+        <text class="node-label center" x="240" y="126" text-anchor="middle">IT</text>
+        <text class="node-label center" x="240" y="140" text-anchor="middle">SUPPORT</text>
+        <text class="node-label" x="100" y="52" text-anchor="middle">Networking</text>
+        <text class="node-label" x="100" y="65" text-anchor="middle">LAN/WLAN</text>
+        <text class="node-label" x="380" y="52" text-anchor="middle">Cloud</text>
+        <text class="node-label" x="380" y="65" text-anchor="middle">AWS · Oracle</text>
+        <text class="node-label" x="100" y="202" text-anchor="middle">Scripting</text>
+        <text class="node-label" x="100" y="215" text-anchor="middle">Python · SQL</text>
+        <text class="node-label" x="380" y="202" text-anchor="middle">Office &amp;</text>
+        <text class="node-label" x="380" y="215" text-anchor="middle">M365 Admin</text>
+      </svg>
+    </div>
+  </section>
+
+  <section class="section reveal" id="education">
+    <h2><span class="tag">02</span> education_log</h2>
+    <div class="log-entries">
+      <div class="log-entry">
+        <div class="log-timestamp">2025-10-01 → CURRENT</div>
+        <div class="log-title">Student — Contabilitate și Informatică</div>
+        <div class="log-org">Facultatea de Științe Economice, ULBS · Sibiu, Romania</div>
+        <div class="log-modules">
+          <span>Microsoft Office</span><span>Business Information Systems</span>
+          <span>Database Fundamentals (SQL)</span><span>Python Programming</span>
+          <span>Digital Business Processes</span><span>Data Management</span>
+        </div>
+      </div>
+      <div class="log-entry">
+        <div class="log-timestamp">2021-09-01 → 2025-06-15</div>
+        <div class="log-title">Graduate — Științe Socio-umane</div>
+        <div class="log-org">Colegiul Național "Mihai Viteazul" · Sibiu, Romania</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="skills">
+    <h2><span class="tag">03</span> skill_matrix</h2>
+    <div class="skills-grid">
+      <div class="skill-cat">
+        <h3>Systems &amp; Cloud</h3>
+        <div class="skill-tags">
+          <span>Linux</span><span>AWS</span><span>Oracle Cloud</span>
+          <span>Windows / Microsoft 365</span><span>Networking (LAN/WLAN)</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h3>Programming &amp; Data</h3>
+        <div class="skill-tags">
+          <span>Python</span><span>SQL</span><span>GitHub</span><span>VS Code</span>
+        </div>
+      </div>
+      <div class="skill-cat">
+        <h3>Productivity &amp; Collaboration</h3>
+        <div class="skill-tags">
+          <span>Microsoft Word</span><span>Excel</span><span>PowerPoint</span>
+          <span>Outlook</span><span>Microsoft Teams</span><span>Jira</span>
+        </div>
+      </div>
+    </div>
+    <div class="note-box">
+      <strong>Currently learning:</strong> enterprise network administration, Microsoft 365 tenant management, and cloud
+      fundamentals on AWS &amp; Oracle Cloud — building toward a support/sysadmin role where I can grow into
+      infrastructure.
+    </div>
+  </section>
+
+  <section class="section reveal" id="contact">
+    <h2><span class="tag">04</span> uplink</h2>
+    <div class="contact-panel">
+      <div class="contact-row"><span class="k">email</span><span class="v">petrumarin256@gmail.com</span></div>
+      <div class="contact-row"><span class="k">location</span><span class="v">Sibiu, Romania</span></div>
+      <div class="contact-row"><span class="k">github</span><span class="v">github.com/iampetru</span></div>
+      <div class="cta-row">
+        <a href="mailto:petrumarin256@gmail.com" class="btn">send message →</a>
+        <a href="#" class="btn secondary">download CV (.pdf)</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 Marin Petru — built with HTML, CSS &amp; a bit too much coffee.</footer>
+
+  <script>
+    (function () {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* mobile nav toggle */
+      const navToggle = document.getElementById('navToggle');
+      const navLinks = document.getElementById('navLinks');
+      navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+      navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+      /* scroll reveal */
+      const revealEls = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window && !reduceMotion) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+        }, { threshold: 0.15 });
+        revealEls.forEach(el => io.observe(el));
+      } else {
+        revealEls.forEach(el => el.classList.add('in-view'));
+      }
+
+      /* terminal boot + commands */
+      const body = document.getElementById('terminalBody');
+      const input = document.getElementById('terminalInput');
+
+      const bootLines = [
+        { t: '[  OK  ] Loading profile... Facultatea de Stiinte Economice, ULBS', c: 'ok' },
+        { t: '[  OK  ] Mounting skillset: Python, SQL, Linux, AWS, Oracle Cloud', c: 'ok' },
+        { t: '[  OK  ] Initializing network stack... LAN/WLAN modules loaded', c: 'ok' },
+        { t: '[  OK  ] Starting Microsoft 365 services', c: 'ok' },
+        { t: '[  OK  ] Troubleshooting daemon.......... ACTIVE', c: 'ok' },
+        { t: '[ DONE ] System ready.', c: 'amber' },
+        { t: '', c: 'dim' },
+        { t: "Type 'help' to see available commands.", c: 'dim' },
+      ];
+
+      function addLine(text, cls) {
+        const div = document.createElement('div');
+        div.className = 'line ' + (cls || '');
+        div.textContent = text;
+        body.appendChild(div);
+        body.scrollTop = body.scrollHeight;
+      }
+
+      function printBoot() {
+        if (reduceMotion) {
+          bootLines.forEach(l => addLine(l.t, l.c));
+          return;
+        }
+        let i = 0;
+        function next() {
+          if (i >= bootLines.length) return;
+          addLine(bootLines[i].t, bootLines[i].c);
+          i++;
+          setTimeout(next, 220);
+        }
+        next();
+      }
+      printBoot();
+
+      const commands = {
+        help() {
+          addLine('available commands:', 'tag-info');
+          ['whoami', 'about', 'education', 'skills', 'contact', 'clear', 'sudo hire-me'].forEach(c => addLine('  ' + c, 'out'));
+        },
+        whoami() { addLine('guest — a recruiter, a curious visitor, or a future colleague. either way, welcome.', 'out'); },
+        about() { scrollToId('about'); addLine('→ jumping to whoami', 'dim'); },
+        education() { scrollToId('education'); addLine('→ jumping to education_log', 'dim'); },
+        skills() { scrollToId('skills'); addLine('→ jumping to skill_matrix', 'dim'); },
+        contact() { scrollToId('contact'); addLine('→ jumping to uplink', 'dim'); },
+        clear() { body.innerHTML = ''; },
+        'sudo hire-me'() {
+          addLine('[sudo] password for guest: ', 'dim');
+          addLine('permission granted. request forwarded to hiring manager. 🚀', 'ok');
+        }
+      };
+
+      function scrollToId(id) {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        const raw = input.value.trim();
+        if (!raw) return;
+        addLine('guest@portfolio:~$ ' + raw, 'amber');
+        const fn = commands[raw.toLowerCase()];
+        if (fn) { fn(); } else { addLine("command not found: " + raw + " — type 'help'", 'err'); }
+        input.value = '';
+      });
+
+      /* nav links also usable as commands */
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          scrollToId(a.getAttribute('href').slice(1));
+        });
+      });
+    })();
+  </script>
+
+</body>
+
+</html>
