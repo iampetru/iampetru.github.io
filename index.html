@@ -479,6 +479,27 @@
       }
     }
 
+    /* EXPERIENCE */
+    .exp-bullets {
+      list-style: none;
+      margin: 14px 0 16px;
+    }
+
+    .exp-bullets li {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      padding: 4px 0 4px 20px;
+      position: relative;
+      max-width: 90ch;
+    }
+
+    .exp-bullets li::before {
+      content: "›";
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+    }
+
     /* EDUCATION LOG */
     .log-entries {
       border-left: 2px solid var(--border);
@@ -756,6 +777,7 @@
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">≡</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="#about">about</a></li>
+      <li><a href="#experience">experience</a></li>
       <li><a href="#education">education</a></li>
       <li><a href="#skills">skills</a></li>
       <li><a href="#contact">contact</a></li>
@@ -829,8 +851,36 @@
     </div>
   </section>
 
+  <section class="section reveal" id="experience">
+    <h2><span class="tag">02</span> work_experience</h2>
+    <div class="log-entries">
+      <div class="log-entry">
+        <div class="log-timestamp">2026-07-01 → CURRENT</div>
+        <div class="log-title">IT Technician | Software Developer</div>
+        <div class="log-org">Industrial / Manufacturing Environment</div>
+        <ul class="exp-bullets">
+          <li>Developed an ESP32-S3-based industrial IoT controller for machine monitoring and control in a manufacturing environment.</li>
+          <li>Integrated 8 digital inputs and 8 relay outputs with industrial 24 V signals and physical machine controls.</li>
+          <li>Implemented machine cycle detection, production counting and operational logic.</li>
+          <li>Developed an operator-facing web dashboard for production interaction and monitoring.</li>
+          <li>Implemented functionality for registering production pauses, maintenance interventions and dynamically adjusting hourly production targets.</li>
+          <li>Developed communication between embedded devices and a backend server for production data collection.</li>
+          <li>Worked on database integration, CSV-based data exchange and automated production reporting.</li>
+          <li>Developed embedded firmware using C/C++ with Arduino IDE and PlatformIO.</li>
+          <li>Worked with Python and FastAPI for backend development and data processing.</li>
+          <li>Performed hardware/software integration, troubleshooting and testing in an industrial environment.</li>
+          <li>Created technical documentation covering hardware integration, firmware architecture and system deployment.</li>
+        </ul>
+        <div class="log-modules">
+          <span>ESP32-S3</span><span>C/C++</span><span>PlatformIO</span><span>Arduino IDE</span>
+          <span>Python</span><span>FastAPI</span><span>SQL / CSV</span><span>Industrial IoT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section reveal" id="education">
-    <h2><span class="tag">02</span> education_log</h2>
+    <h2><span class="tag">03</span> education_log</h2>
     <div class="log-entries">
       <div class="log-entry">
         <div class="log-timestamp">2025-10-01 → CURRENT</div>
@@ -851,7 +901,7 @@
   </section>
 
   <section class="section reveal" id="skills">
-    <h2><span class="tag">03</span> skill_matrix</h2>
+    <h2><span class="tag">04</span> skill_matrix</h2>
     <div class="skills-grid">
       <div class="skill-cat">
         <h3>Systems &amp; Cloud</h3>
@@ -882,7 +932,7 @@
   </section>
 
   <section class="section reveal" id="contact">
-    <h2><span class="tag">04</span> uplink</h2>
+    <h2><span class="tag">05</span> uplink</h2>
     <div class="contact-panel">
       <div class="contact-row"><span class="k">email</span><span class="v">petrumarin256@gmail.com</span></div>
       <div class="contact-row"><span class="k">location</span><span class="v">Sibiu, Romania</span></div>
@@ -959,10 +1009,11 @@
       const commands = {
         help() {
           addLine('available commands:', 'tag-info');
-          ['whoami', 'about', 'education', 'skills', 'contact', 'clear', 'sudo hire-me'].forEach(c => addLine('  ' + c, 'out'));
+          ['whoami', 'about', 'experience', 'education', 'skills', 'contact', 'clear', 'sudo hire-me'].forEach(c => addLine('  ' + c, 'out'));
         },
         whoami() { addLine('guest — a recruiter, a curious visitor, or a future colleague. either way, welcome.', 'out'); },
         about() { scrollToId('about'); addLine('→ jumping to whoami', 'dim'); },
+        experience() { scrollToId('experience'); addLine('→ jumping to work_experience', 'dim'); },
         education() { scrollToId('education'); addLine('→ jumping to education_log', 'dim'); },
         skills() { scrollToId('skills'); addLine('→ jumping to skill_matrix', 'dim'); },
         contact() { scrollToId('contact'); addLine('→ jumping to uplink', 'dim'); },
